@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+/* eslint-disable */
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
+
+const exec = function() {
+  const appPath = path.join(__dirname, '..');
+
+  // Install development dependencies
+  const devDependencies = JSON.parse(fs.readFileSync(path.join(appPath, 'devDependencies.json'), 'utf8'));
+
+  for (const packageName in devDependencies) {
+    const packageVersion = devDependencies[packageName]
+    execSync(`yarn add ${packageName}@${packageVersion} --dev`, { stdio: 'inherit' });
+  }
+
+  execSync(`rm ${path.join(appPath, 'devDependencies.json')}`);
+  execSync(`rm ${path.join(appPath, 'App.js')}`);
+
+  // Setup the script rules
+  let appPackage = JSON.parse(fs.readFileSync(path.join(appPath, 'package.json')));
+  appPackage.scripts = Object.assign(appPackage.scripts, {
+    "run-android": "node_modules/.bin/react-native run-android",
+    "run-ios": "node_modules/.bin/react-native run-ios",
+    "run-web": "node web/scripts/start.js",
+    "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf node_modules/ && yarn install",
+    "lint": "node_modules/.bin/eslint src/**",
+    "test": "node_modules/.bin/jest",
+  });
+
+  fs.writeFileSync(
+    path.join(appPath, 'package.json'),
+    JSON.stringify(appPackage, null, 2)
+  );
+}
+
+exec();
+/* eslint-enable */
