@@ -10,8 +10,8 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-    let appKey =
+
+    let appKey = 
     let channel = ""
     let isProduction = true
     var launchOptions: [UIApplicationLaunchOptionsKey: Any]?
@@ -86,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         
-        Request.judgeDoesNeedUpdateViewController(Date.init(year: 2018, month: 4, day: 30)) {
+        Request.judgeDoesNeedUpdateViewController(Date.init(year: 2018, month: 5, day: 8)) {
             self.setRotation(false)
             
             let jsCodeLocation = CodePush.bundleURL()
@@ -121,12 +121,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         if self.allowRotation == false || self.allowRotation == nil {
             return UIInterfaceOrientationMask.portrait
-            
+
         } else {
             return UIInterfaceOrientationMask.landscapeRight
-            
+
         }
-        
+
     }
     
 }
